@@ -1,7 +1,8 @@
 <script setup>
+import login from './views/login.vue';
 </script>
 
 <template>
-  HelloWorld
+  <login/>
 </template>
 

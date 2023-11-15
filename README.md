@@ -1,29 +1,19 @@
 # demo
 
-This template should help get you started developing with Vue 3 in Vite.
+注册页面
 
-## Recommended IDE Setup
+```vue
+//用于注册模型
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+const registerData = ref({
 
-## Customize configuration
+  username:'',
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+  password:'',
 
-## Project Setup
+  rePassword:''
 
-```sh
-npm install
+})
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+定义检验规则
