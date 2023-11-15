@@ -143,3 +143,69 @@ const baseURL = '/api';
 注册成功
 
 ![image-20231115154933387](C:/Users/lingzipeng/AppData/Roaming/Typora/typora-user-images/image-20231115154933387.png)
+
+## 登录
+
+复用注册内容
+
+```js
+//登录
+
+export const loginService = (registerData) => {
+
+  var params = new URLSearchParams()
+
+  for (let key in registerData) {
+
+​    params.append(key, registerData[key])
+
+  }
+
+  return request.post('/user/login', params)
+
+}
+```
+
+```js
+//登录事件函数
+
+const login = async () => {
+
+ let result = await loginService(registerData.value);
+
+ if (result.code === 0) {
+
+  alert("登录成功！");
+
+ } else {
+
+  alert("登录失败！");
+
+ }
+
+};
+```
+
+
+
+## 清空数据效果
+
+```js
+//清空数据
+
+const clearRegisterData = () => {
+
+ registerData.value = {
+
+  username: "",
+
+  password: "",
+
+  rePassword: "",
+
+ };
+
+};
+```
+
+![image-20231115162506054](C:/Users/lingzipeng/AppData/Roaming/Typora/typora-user-images/image-20231115162506054.png)
