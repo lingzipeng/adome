@@ -209,3 +209,84 @@ const clearRegisterData = () => {
 ```
 
 ![image-20231115162506054](C:/Users/lingzipeng/AppData/Roaming/Typora/typora-user-images/image-20231115162506054.png)
+
+## 拦截器优化
+
+```js
+if(result.data.code === 0){
+
+​      return result.data;
+
+​    }
+
+​    //操作失败
+
+​    ElMessage.error(result.data.msg?result.data.msg:'服务异常')
+
+​    return Promise.reject(result.data)
+```
+
+引用elementui-plus的样式
+
+```js
+import { ElMessage } from 'element-plus';
+```
+
+## 主页面
+
+
+
+## 路由
+
+```js
+import { createRouter,createWebHistory } from "vue-router";
+
+import loginVue from '@/views/Login.vue'
+
+import layoutVue from '@/views/Layout.vue'
+
+const routes = [
+
+  { path: '/login', component: loginVue},
+
+  { path: '/', component: layoutVue}
+
+]
+
+//创建路由器
+
+const router = createRouter({
+
+  history: createWebHistory(),
+
+  routes: routes
+
+});
+
+export default router
+```
+
+## 子路由
+
+```js
+const routes = [
+
+  { path: '/login', component: loginVue},
+
+  { path: '/', component: layoutVue,redirect: '/article/manage',children:[
+
+​    { path: '/article/category', component: ArticleCategoryVue },
+
+​    { path: 'article/manage', component: ArticleManageVue },
+
+​    { path: '/user/info', component: UserInfoVue},
+
+​    { path: '/user/avatar', component: UserAvatarVue},
+
+​    { path: '/user/password', component:UserResetPasswordVue},
+
+  ]}
+
+]
+```
+

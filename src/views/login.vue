@@ -2,6 +2,7 @@
 import { User, Lock } from "@element-plus/icons-vue";
 import { ref } from "vue";
 import { registerService, loginService } from "@/api/user";
+import { ElMessage } from "element-plus";
 //控制注册与登录表单的显示， 默认显示注册
 const isRegister = ref(false);
 //用于注册模型
@@ -38,21 +39,13 @@ const rules = {
 //注册事件的函数
 const register = async () => {
   let result = await registerService(registerData.value);
-  if (result.code === 0) {
-    alert("注册成功！");
-  } else {
-    alert("注册失败！");
-  }
+  ElMessage.success(result.msg ? result.msg : '注册成功')
 };
 
 //登录事件函数
 const login = async () => {
   let result = await loginService(registerData.value);
-  if (result.code === 0) {
-    alert("登录成功！");
-  } else {
-    alert("登录失败！");
-  }
+  ElMessage.success(result.msg ? result.msg : '登录成功')
 };
 
 //清空数据
