@@ -12,7 +12,7 @@ export const articleCategoryAddService = (categoryData) =>{
 
 //文章分类修改
 export const ArticleCategoryUpdateService = (categoryData) => {
-    request.put('/category', categoryData)
+    return request.put('/category', categoryData)
 }
 
 //删除分类

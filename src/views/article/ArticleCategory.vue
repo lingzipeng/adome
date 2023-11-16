@@ -80,7 +80,8 @@ const title = ref("");
 const updateCategory = async()=>{
     //调用接口
     let result = await ArticleCategoryUpdateService(categoryModel.value);
-    ElMessage.success('修改成功')
+    // console.log(result)
+    ElMessage.success(result.message ? result.message:'修改成功')
     dialogVisible.value = false;
     //刷新页面
     ArticleCategoryList();
@@ -106,6 +107,7 @@ const deleteCategory = (row) => {
         .then(async() => {
             //用户点击了确认
             let result = await articleCategoryDeleteService(row.id);
+            //console.log(result)
             ElMessage.success(result.message ? result.message:'删除成功')
             //刷新页面
             ArticleCategoryList();
