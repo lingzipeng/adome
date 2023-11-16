@@ -4,3 +4,18 @@ import request from '@/utils/request.js'
 export const ArticleCategoryListService = ()=>{
     return request.get('/category')
 }
+
+//文章分类添加
+export const articleCategoryAddService = (categoryData) =>{
+    return request.post('/category', categoryData)
+}
+
+//文章分类修改
+export const ArticleCategoryUpdateService = (categoryData) => {
+    request.put('/category', categoryData)
+}
+
+//删除分类
+export const articleCategoryDeleteService = (id) => {
+    return request.delete('/category?id='+id)
+}

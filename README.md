@@ -372,3 +372,133 @@ instance.interceptors.request.use(
 )
 ```
 
+## 添加文章分类功能
+
+```js
+const addCategory = async() =>{
+
+  let result = await articleCategoryAddService(categoryModel.value);
+
+  ElMessage.success(result.msg? result.msg:'添加成功')
+
+
+
+  ArticleCategoryList();
+
+  dialogVisible.value=false;
+
+}
+```
+
+## 编辑分类，弹窗展示
+
+```js
+//展示编辑弹窗
+
+const showDialog = (row) => {
+
+  dialogVisible.value = true;
+
+  title.value = '编辑分类'
+
+  //数据拷贝
+
+  categoryModel.value.categoryName = row.categoryName;
+
+  categoryModel.value.categoryAlias = row.categoryAlias;
+
+  categoryModel.value.id = row.id
+
+}
+```
+
+## 调用接口
+
+```js
+//编辑分类
+
+const updateCategory = async()=>{
+
+  //调用接口
+
+  let result = await ArticleCategoryUpdateService(categoryModel.value);
+
+  ElMessage.success(result.msg?result.msg:'修改成功')
+
+  //刷新页面
+
+  ArticleCategoryList();
+
+  dialogVisible.value = false;
+
+}
+
+
+
+//清空数据模型的数据
+
+const clearData = () =>{
+
+  categoryModel.value.categoryName='';
+
+  categoryModel.value.categoryAlias='';
+
+}
+```
+
+## 删除分类
+
+```js
+//删除分类  给删除按钮绑定事件
+
+const deleteCategory = (row) => {
+
+  ElMessageBox.confirm(
+
+​    '你确认删除该分类信息吗？',
+
+​    '温馨提示',
+
+​    {
+
+​      confirmButtonText: '确认',
+
+​      cancelButtonText: '取消',
+
+​      type: 'warning',
+
+​    }
+
+  )
+
+​    .then(() => {
+
+​      //用户点击了确认
+
+​      let result = articleCategoryDeleteService(row.id);
+
+​      ElMessageBox.success(result.massage?result.massage:'删除成功')
+
+​      //刷新页面
+
+​      ArticleCategoryList();
+
+​    })
+
+​    .catch(() => {
+
+​      //用户点击了取消
+
+​      ElMessage({
+
+​        type: 'info',
+
+​        message: '取消删除',
+
+​      })
+
+​    })
+
+}
+```
+
