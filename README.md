@@ -290,3 +290,85 @@ const routes = [
 ]
 ```
 
+## 文章分类列表查询
+
+接收数据
+
+```js
+const ArticleCategoryList = async()=>{
+
+  let result = await ArticleCategoryListService();
+
+  categorys.value = result.data;
+
+}
+
+ArticleCategoryList();
+```
+
+## Pinia状态管理库
+
+```js
+import {defineStore} from 'pinia'
+
+import {ref} from 'vue'
+
+export const useTokenStore = defineStore('token', ()=>{
+
+  const token = ref('')
+
+  const setToken = (newToken)=>{
+
+​    token.value = newToken
+
+  }
+
+  const removeToken = () =>{
+
+​    token.value = ''
+
+  }
+
+  return {
+
+​    token,setToken,removeToken
+
+  }
+
+})
+```
+
+## 请求拦截器
+
+```js
+//添加请求拦截器
+
+instance.interceptors.request.use(
+
+  (config)=>{
+
+​    //在发送之前
+
+​    let TokenStore = useTokenStore()
+
+​    if(TokenStore.token){
+
+​      config.headers.Authorization=TokenStore.token
+
+​    }
+
+​    return config
+
+  },
+
+  //错误
+
+  (err)=>{
+
+​    Promise.reject(err)
+
+  }
+
+)
+```
+

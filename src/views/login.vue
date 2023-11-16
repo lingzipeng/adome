@@ -3,6 +3,9 @@ import { User, Lock } from "@element-plus/icons-vue";
 import { ref } from "vue";
 import { registerService, loginService } from "@/api/user";
 import { ElMessage } from "element-plus";
+import { useTokenStore } from '@/stores/token.js'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 //控制注册与登录表单的显示， 默认显示注册
 const isRegister = ref(false);
 //用于注册模型
@@ -43,9 +46,12 @@ const register = async () => {
 };
 
 //登录事件函数
+const tokenStore = useTokenStore();
 const login = async () => {
   let result = await loginService(registerData.value);
   ElMessage.success(result.msg ? result.msg : '登录成功')
+  tokenStore.setToken(result.data)
+  router.push('/')
 };
 
 //清空数据
