@@ -503,3 +503,354 @@ const deleteCategory = (row) => {
 ```
 
 ## 文章列表
+
+```js
+//获取文章列表数据
+
+const articleList = async () => {
+
+ let params = {
+
+  pageNum: pageNum.value,
+
+  pageSize: pageSize.value,
+
+  categoryId: categoryId.value ? categoryId.value : null,
+
+  state: state.value ? state.value : null,
+
+ };
+
+ let result = await articleListService(params);
+
+ //渲染视图
+
+ total.value = result.data.total;
+
+ articles.value = result.data.items;
+
+ //扩展属性名categoryName
+
+ for (let i = 0; i < articles.value.length; i++) {
+
+  let article = article.value[i];
+
+  for (let j = 0; j < categorys.value.length; i++) {
+
+   if (article.categoryId == categorys.value[j].id) {
+
+​    article.categoryName = categorys.value[j].categoryName;
+
+   }
+
+  }
+
+ }
+
+};
+```
+
+```js
+//添加文章
+
+const addArticle = async (clickState) => {
+
+  let result = await articleAddService(articleModel.value);
+
+  ElMessage.success(result.msg? result.msg:'添加成功')
+
+  visibleDrawer.value = false;
+
+  articleList();
+
+}
+```
+
+## 保存个人用户基本信息
+
+```js
+import { defineStore } from "pinia";
+
+import { ref } from 'vue';
+
+const useUserInfoStore = defineStore('userInfo', ()=>{
+
+  const info = ref({})
+
+  const setInfo = (newInfo) => {
+
+​    info.value = newInfo
+
+  }
+
+  const removeInfo = () =>{
+
+​    info.value = {}
+
+  }
+
+  return { info, setInfo, removeInfo}
+
+},
+
+{
+
+  persist:true
+
+})
+
+ export default useUserInfoStore;
+```
+
+## 退出登录
+
+```js
+import { userInfoService } from '@/api/user.js';
+
+import useUserInfoStore from '@/stores/userInfo.js';
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const handleCommand = (command) =>{
+
+  //判断指令
+
+  if(command === 'logout'){
+
+​    ElMessageBox.confirm(
+
+​    '你确认要退出吗？',
+
+​    '温馨提示',
+
+​    {
+
+​      confirmButtonText: '确认',
+
+​      cancelButtonText: '取消',
+
+​      type: 'warning',
+
+​    }
+
+  )
+
+​    .then(() => {  
+
+​      tokenStore.removeToken()
+
+​      userInfoStore.removeToken()
+
+​      router.push('/login')
+
+​      ElMessage.success(result.message ? result.message:'退出登录成功')
+
+​    })
+
+​    .catch(() => {
+
+​      //用户点击了取消
+
+​      ElMessage({
+
+​        type: 'info',
+
+​        message: '取消删除',
+
+​      })
+
+​    })
+
+  }else{
+
+​    router.push('/user/'+command)
+
+  }
+
+}
+```
+
+
+
+## 基本资料修改
+
+```js
+//修改个人信息
+
+const updateUserInfo = async() =>{
+
+  let result = await userInfoUpdateService(userInfo.value)
+
+  ElMessage.success(result.msg?result.msg:'修改成功')
+
+  //修改pinia
+
+  userInfoStore.setInfo(userInfo.value)
+
+}
+```
+
+## 用户头像更改
+
+```js
+//回调函数
+
+const uploadSuccess = (result)=>{
+
+  imgUrl.value = result.data;
+
+}
+
+//头像修改
+
+const updateAvatar = async()=>{
+
+  let result = await userAvatarUpdateService(imgUrl.value);
+
+  ElMessage.success(result.msg? result.msg:'修改成功')
+
+  //修改pinia
+
+  userInfoStore.info.userPic = imgUrl.value
+
+}
+```
+
+## 修改密码
+
+xiaodong
+
+1234567
+
+```html
+
+
+<template>
+
+ <el-card class="page-container">
+
+  <template #header>
+
+      <div class="header">
+
+​    <span>修改密码</span>
+
+   </div>
+
+  </template>
+
+  <el-row>
+
+   <el-col :span="12">
+
+​    <el-form :model="userInfo" label-width="100px" size="large">
+
+​     <el-form-item label="旧密码">
+
+​      <el-input
+
+​       v-model="userInfo.old_pwd"
+
+​       type="password"
+
+​       placeholder="旧密码"
+
+​       show-password
+
+​      \></el-input>
+
+​     </el-form-item>
+
+​     <el-form-item label="新密码" prop="nickname">
+
+​      <el-input
+
+​       v-model="userInfo.new_pwd"
+
+​       type="password"
+
+​       placeholder="请输入修改后的密码"
+
+​       show-password
+
+​      \></el-input>
+
+​     </el-form-item>
+
+​     <el-form-item label="确认密码" prop="email">
+
+​      <el-input
+
+​       v-model="userInfo.re_pwd"
+
+​       type="rePassword"
+
+​       placeholder="请再次确认"
+
+​       show-password
+
+​      \></el-input>
+
+​     </el-form-item>
+
+​     <el-form-item>
+
+​      <el-button type="primary" @click="updatePassword()"
+
+​       \>提交修改</el-button
+
+​      \>
+
+​     </el-form-item>
+
+​    </el-form>
+
+   </el-col>
+
+  </el-row>
+
+ </el-card>
+
+</template>
+```
+
+```js
+import { ref } from "vue";
+
+import { RePasswordService } from "@/api/user.js";
+
+import { ElMessage } from "element-plus";
+
+const userInfo = ref({
+
+ old_pwd: "",
+
+ new_pwd: "",
+
+ re_pwd: "",
+
+});
+
+//修改密码
+
+const updatePassword = async () => {
+
+ let result = await RePasswordService(userInfo.value);
+
+ ElMessage.success(result.msg ? result.msg : "修改成功");
+
+};
+```
+
+```js
+//修改密码
+
+export const RePasswordService = (userInfoData) =>{
+
+  return request.patch('/user/updatePwd', userInfoData)
+
+}
+```
+
